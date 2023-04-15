@@ -1,38 +1,102 @@
-.App {
-  text-align: center;
+* {
+padding: 5px;
+margin: 0;
+box-sizing: border-box;
+}
+.App{
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.ToDo {
   display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.board {
+  background-color: rgb(235, 254, 254);
+  min-width: 300px;
+  min-height: 500px;
+  border: 5px solid lightseagreen;
+  padding: 20px, 10px;
+  border-radius: 25px;
+  margin: 10px;
+  display: flex;
+  align-items: center;
   flex-direction: column;
+  /* aspect-ratio: 1/5; */
+  /* flex-grow: 1; */
+}
+.container{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* min-width: 100%; */
+}
+.board__title {
+  border: 2px solid rgb(188, 238, 144);
+  background-color: rgb(235, 254, 254);
+  border-radius: 5px;
+  font-size: 1.5rem;
+  font-weight: 600;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.item {
+  border: 2px solid rgb(204, 255, 95);
+  font-size: large;
+  color: rgb(182, 255, 26);
+  padding: 10px 5px;
+  border-radius: 10px;
+  margin: 5px 5px;
+  cursor: grab;
+  background-color: rgb(92, 126, 155);
+  min-width: 100%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.serch{
+  border: 2px solid rgb(188, 238, 144);
+  background-color: rgb(235, 254, 254);
+  border-radius: 5px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  width: 40%;
+  max-width: 70%;
+}
+
+.center{
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+}
+
+.fetch{
+  border: 2px solid rgb(188, 238, 144);
+  background-color: rgb(235, 254, 254);
+  border-radius: 5px;
+  font-size: 1.4rem;
+  font-weight: 300;
+}
+.fetch:hover{
+  background: #64cc69;  
+  box-shadow: 0 0 5px #64cc69, 0 0 25px
+  #64cc69, 0 0 200px #64cc69;
+}
+.text-wrap {
+  width: 30ch;
+  word-wrap: break-word;
+}   
+.anc{
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  border: 2px solid rgb(188, 238, 144);
+  background-color: rgb(235, 254, 254);
+  border-radius: 5px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  width: 40%;
+  max-width: 70%;
+ 
 }
