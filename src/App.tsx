@@ -9,13 +9,22 @@ interface Item {
   type: string;
   comment: number;
 }
-
 interface Board {
   id: number;
   title: string;
   items: Item[];
 }
-
+interface BoardItem {
+  id: number;
+  title: string;
+  updated_at: string;
+  type: string;
+  comment: number;
+}
+interface BoardData {
+  url: string;
+  boards: Board[];
+}
 interface Issue {
   number: number;
   title: string;
@@ -28,29 +37,7 @@ interface Issue {
   comments: number;
 }
 
-interface BoardItem {
-  id: number;
-  title: string;
-  updated_at: string;
-  type: string;
-  comment: number;
-}
-
-interface Issue {
-  number: number;
-  title: string;
-  state: string;
-  assignee: any; 
-  updated_at: string;
-  user: {
-    type: string;
-  };
-  comments: number;
-}
-
-
-
-const App: React.FC  = () => {
+const App: React.FC = () => {
 
   const [issues, setIssues] = useState<any[]>([]);
   const [boards, setBoards] = useState<Board[]>([
@@ -65,20 +52,27 @@ const App: React.FC  = () => {
 
 
   useEffect(() => {
-    const savedBoards = localStorage.getItem(`boards-${inputUrl}`);
+    const savedBoards = localStorage.getItem("boards");
     if (savedBoards) {
-      setBoards(JSON.parse(savedBoards));
-    }
-    else {
+      const boardsData = JSON.parse(savedBoards);
+      const boardForUrl = boardsData.find((boardData: BoardData) => boardData.url === inputUrl);
+      if (boardForUrl) {
+        setBoards(boardForUrl.boards);
+      } else {
+        setBoards([
+          { id: 1, title: "ToDo", items: [] },
+          { id: 2, title: "in Progress", items: [] },
+          { id: 3, title: "Done", items: [] },
+        ]);
+      }
+    } else {
       setBoards([
         { id: 1, title: "ToDo", items: [] },
         { id: 2, title: "in Progress", items: [] },
         { id: 3, title: "Done", items: [] },
       ]);
-    }    
+    }
   }, [inputUrl]);
-  
-  
 
   useEffect(() => {
     saveBoardsToLocalStorage();
@@ -94,13 +88,24 @@ const App: React.FC  = () => {
 
   function saveBoardsToLocalStorage() {
     if (inputUrl) {
-      localStorage.setItem(`boards-${inputUrl}`, JSON.stringify(boards));
+      const savedBoards = localStorage.getItem("boards");
+      let boardsData = [];
+      if (savedBoards) {
+        boardsData = JSON.parse(savedBoards);
+        const existingIndex = boardsData.findIndex((boardData: BoardData) => boardData.url === inputUrl);
+        if (existingIndex !== -1) {
+          boardsData[existingIndex].boards = boards;
+        } else {
+          boardsData.push({ url: inputUrl, boards });
+        }
+      } else {
+        boardsData.push({ url: inputUrl, boards });
+      }
+      localStorage.setItem("boards", JSON.stringify(boardsData));
     }
   }
-  
 
-
-  const handleIssues = (fetchedIssues: Issue[], url: string) => { 
+  const handleIssues = (fetchedIssues: Issue[], url: string) => {
     setIsLoading(true);
     setIssues(fetchedIssues);
     setInputUrl(url);
@@ -112,13 +117,13 @@ const App: React.FC  = () => {
       e.target.style.boxShadow = "0 4px 3px green";
     }
   };
-  
+
   const dragLeaveHandler = (e: React.DragEvent) => {
     if (e.target instanceof HTMLElement) {
       e.target.style.boxShadow = 'none';
     }
   };
-  
+
   const dragEndHandler = (e: React.DragEvent) => {
     if (e.target instanceof HTMLElement) {
       e.target.style.boxShadow = 'none';
@@ -211,9 +216,7 @@ const App: React.FC  = () => {
           >
             <div className='container'>
               <div className='board__title'>{board.title}</div>
-
               {board.items.map(item =>
-
                 <div
                   onDragOver={(e) => { dragOverHandler(e) }}
                   onDragLeave={e => dragLeaveHandler(e)}
