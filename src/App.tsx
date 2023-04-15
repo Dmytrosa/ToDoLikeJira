@@ -49,9 +49,6 @@ interface Issue {
 }
 
 
-interface InputFieldProps {
-  onFetchIssues: (issues: Issue[], url: string) => void;
-}
 
 const App: React.FC  = () => {
 
@@ -66,14 +63,22 @@ const App: React.FC  = () => {
   const [currentItem, setCurrentItem] = useState<Item | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+
   useEffect(() => {
-    const savedBoards = localStorage.getItem('boards');
-    const savedUrl = localStorage.getItem('url');
-    if (savedBoards && savedUrl === inputUrl) {
+    const savedBoards = localStorage.getItem(`boards-${inputUrl}`);
+    if (savedBoards) {
       setBoards(JSON.parse(savedBoards));
     }
+    else {
+      setBoards([
+        { id: 1, title: "ToDo", items: [] },
+        { id: 2, title: "in Progress", items: [] },
+        { id: 3, title: "Done", items: [] },
+      ]);
+    }    
   }, [inputUrl]);
-
+  
+  
 
   useEffect(() => {
     saveBoardsToLocalStorage();
@@ -89,11 +94,10 @@ const App: React.FC  = () => {
 
   function saveBoardsToLocalStorage() {
     if (inputUrl) {
-      localStorage.setItem('boards', JSON.stringify(boards));
-      localStorage.setItem('url', inputUrl);
+      localStorage.setItem(`boards-${inputUrl}`, JSON.stringify(boards));
     }
   }
-
+  
 
 
   const handleIssues = (fetchedIssues: Issue[], url: string) => { 
