@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { InputField } from './Input'
-// import './App.css';
+import './App.css';
 
 interface Item {
   id: number;

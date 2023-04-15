@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import inputStore from './stores/inputStore';
 import inputActions from './actions/inputActions';
 import dispatcher from './dispatchers/dispatcher';
-// import './App.css';
+import './App.css';
 
 export const InputField = ({ onFetchIssues }) => {
   const [value, setValue] = useState(inputStore.getValue());
@@ -53,7 +53,7 @@ export const InputField = ({ onFetchIssues }) => {
     }
 
       const response = await fetch(
-        `https://api.github.com/repos/${owner}/${repo}/issues?per_page=30&page=${page}`
+        `https://api.github.com/repos/${owner}/${repo}/issues?per_page=100&page=${page}`
       );
       
 
