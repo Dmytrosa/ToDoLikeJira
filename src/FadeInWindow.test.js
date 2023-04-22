@@ -1,7 +1,7 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import FadeInWindow from './FadeInWindow';
+import FadeInWindow from './FadeInWindow.tsx';
 
 describe('FadeInWindow component', () => {
   test('renders children and calls onClose after timeout', async () => {
@@ -13,6 +13,10 @@ describe('FadeInWindow component', () => {
     const childrenElement = screen.getByText(childrenText);
     expect(childrenElement).toBeInTheDocument();
 
-    await waitFor(() => expect(onClose).toHaveBeenCalledTimes(1), { timeout: 3500 });
+    await act(async () => {
+      jest.advanceTimersByTime(3000);
+    });
+
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 });

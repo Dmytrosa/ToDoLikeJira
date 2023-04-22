@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import inputStore from './stores/inputStore';
 import inputActions from './actions/inputActions';
 import dispatcher from './dispatchers/dispatcher';
-import Modal from './Modal';
+import Modal from './FadeInWindow ';
 import './App.css';
 
 export const InputField = ({ onFetchIssues }) => {
