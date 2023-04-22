@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import inputStore from './stores/inputStore';
 import inputActions from './actions/inputActions';
 import dispatcher from './dispatchers/dispatcher';
+import Modal from './Modal';
 import './App.css';
 
 export const InputField = ({ onFetchIssues }) => {
@@ -10,6 +11,11 @@ export const InputField = ({ onFetchIssues }) => {
   const [page, setPage] = useState(1);
   const [own, setOwner] = useState();
   const [rep, setRepo] = useState();
+  const [modalShow, setModalShow] = useState(false)
+
+  const handleCloseModal = () => {
+    setModalShow(false)
+  }
 
   const updateValue = () => {
     setValue(inputStore.getValue());
@@ -58,6 +64,7 @@ export const InputField = ({ onFetchIssues }) => {
 
 
       if (!response.ok) {
+    
         alert(`GitHub API request failed: ${response.status}`);
       }
 
@@ -68,26 +75,43 @@ export const InputField = ({ onFetchIssues }) => {
       onFetchIssues(issues, repoUrl);
     } catch (error) {
       console.error(error.message);
+      alert(error.message)
     }
     finally {
       setFetching(false)
     }
   };
 
+  const handleClear = (e) => {
+    e.preventDefault()
+    setTimeout(() => { localStorage.clear();
+      window.location.reload()  }, 2000)
+    setModalShow(true)
+  }
+
+
   return (
     <>
-      <div className='center' >
-        <input
-          className='serch'
-          type="text"
-          value={value}
-          onChange={handleChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-        />
-        <button className='fetch'
-          onClick={fetchIssues} disabled={fetching}>Fetch Issues</button>
-      </div>
+      <form>
+        <div className='center' >
+          <input
+            className='serch'
+            type="text"
+            value={value}
+            onChange={handleChange}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+          />
+          <button type="submit" className='fetch'
+            onClick={fetchIssues} disabled={fetching}>Fetch Issues</button>
+          {modalShow ? <>{localStorage.length ?
+            <Modal onClose={handleCloseModal} ><p>LocaleStore Deleted</p></Modal>
+            : <Modal onClose={handleCloseModal} ><p>LocaleStore Is Already Empty</p></Modal>}</> :
+            <></>
+          }
+          <button className='fetch' onClick={handleClear}> Delete Store</button>
+        </div>
+      </form>
       <div className='center'>
         {
           (own) ?

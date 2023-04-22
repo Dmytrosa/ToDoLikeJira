@@ -39,7 +39,7 @@ interface Issue {
 
 const App: React.FC = () => {
 
-  const [issues, setIssues] = useState<any[]>([]);
+  const [issues, setIssues] = useState<any[]>(null);////
   const [boards, setBoards] = useState<Board[]>([
     { id: 1, title: "ToDo", items: [] },
     { id: 2, title: "in Progress", items: [] },
@@ -58,25 +58,18 @@ const App: React.FC = () => {
       const boardForUrl = boardsData.find((boardData: BoardData) => boardData.url === inputUrl);
       if (boardForUrl) {
         setBoards(boardForUrl.boards);
-      } else {
-        setBoards([
-          { id: 1, title: "ToDo", items: [] },
-          { id: 2, title: "in Progress", items: [] },
-          { id: 3, title: "Done", items: [] },
-        ]);
       }
-    } else {
-      setBoards([
-        { id: 1, title: "ToDo", items: [] },
-        { id: 2, title: "in Progress", items: [] },
-        { id: 3, title: "Done", items: [] },
-      ]);
     }
+   
   }, [inputUrl]);
+
+  
+
 
   useEffect(() => {
     saveBoardsToLocalStorage();
   }, [boards, inputUrl]);
+  //збереження даних у ls
 
   useEffect(() => {
     if (isLoading && issues.length > 0) {
@@ -84,14 +77,14 @@ const App: React.FC = () => {
       setIsLoading(false);
     }
   }, [issues, isLoading]);
-
+  //старт сортування
 
   function saveBoardsToLocalStorage() {
     if (inputUrl) {
       const savedBoards = localStorage.getItem("boards");
       let boardsData = [];
       if (savedBoards) {
-        boardsData = JSON.parse(savedBoards);
+        boardsData = JSON.parse(savedBoards) 
         const existingIndex = boardsData.findIndex((boardData: BoardData) => boardData.url === inputUrl);
         if (existingIndex !== -1) {
           boardsData[existingIndex].boards = boards;
@@ -105,16 +98,61 @@ const App: React.FC = () => {
     }
   }
 
+  // const handleIssues = (fetchedIssues: Issue[], url: string) => {
+  //   setIsLoading(true);
+  //   setIssues(fetchedIssues);
+  //   setInputUrl(url);
+  
+  //   const savedBoards = localStorage.getItem("boards");
+  //   if (savedBoards) {
+  //     const boardsData = JSON.parse(savedBoards);
+  //     const boardForUrl = boardsData.find(
+  //       (boardData: BoardData) => boardData.url === url
+  //     );
+  //     if (boardForUrl) {
+  //       // Update the boards with the data from localStorage
+  //       setBoards(boardForUrl.boards);
+  //     } else {
+  //       setBoards([
+  //         { id: 1, title: "ToDo", items: [] },
+  //         { id: 2, title: "In Progress", items: [] },
+  //         { id: 3, title: "Done", items: [] },
+  //       ]);
+  //     }
+  //   }
+  // };
+
   const handleIssues = (fetchedIssues: Issue[], url: string) => {
     setIsLoading(true);
     setIssues(fetchedIssues);
+  
+    setBoards([
+      { id: 1, title: "ToDo", items: [] },
+      { id: 2, title: "In Progress", items: [] },
+      { id: 3, title: "Done", items: [] },
+    ]);
+  
+    const savedBoards = localStorage.getItem("boards");
+    if (savedBoards) {
+      const boardsData = JSON.parse(savedBoards);
+      const boardForUrl = boardsData.find(
+        (boardData: BoardData) => boardData.url === url
+      );
+      if (boardForUrl) {
+        // Update the boards with the data from localStorage
+        setBoards(boardForUrl.boards);
+      }
+    }
+  
     setInputUrl(url);
   };
+  
+  
 
   const dragOverHandler = (e: React.DragEvent) => {
     e.preventDefault();
     if (e.target instanceof HTMLElement && e.target.className === "item") {
-      e.target.style.boxShadow = "0 4px 3px green";
+      e.target.style.boxShadow = "0 400px 300px green";
     }
   };
 
@@ -143,14 +181,16 @@ const App: React.FC = () => {
     currentBoard.items.splice(currentIndex, 1)
     const dropIndex = board.items.indexOf(item)
     board.items.splice(dropIndex + 1, 0, currentItem)
-    setBoards(boards.map(b => {
+    setBoards(boards.map(b =>{
+      
       if (b.id === board.id) {
         return board
       }
       if (b.id === currentBoard.id) {
         return currentBoard
       }
-      return b
+      return b 
+      
     }))
   }
 
@@ -210,14 +250,16 @@ const App: React.FC = () => {
       <InputField onFetchIssues={(issues: Issue[], url: string) => handleIssues(issues, url)} />
       <div className='ToDo'>
         {boards.map(board =>
-          <div className='board'
+          <div className='board' 
             onDragOver={(e) => { dragOverHandler(e) }}
             onDrop={(e) => dropCardHandler(e, board)}
+            // key={board.id}
           >
             <div className='container'>
               <div className='board__title'>{board.title}</div>
               {board.items.map(item =>
-                <div
+                <div 
+                //  key ={item.id}
                   onDragOver={(e) => { dragOverHandler(e) }}
                   onDragLeave={e => dragLeaveHandler(e)}
                   onDragEnd={(e) => { dragEndHandler(e) }}
