@@ -54,7 +54,6 @@ const App: React.FC = () => {
   const [currentItem, setCurrentItem] = useState<Item | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-
   useEffect(() => {
     const savedBoards = localStorage.getItem("boards");
     if (savedBoards) {
@@ -66,9 +65,6 @@ const App: React.FC = () => {
     }
 
   }, [inputUrl]);
-
-
-
 
   useEffect(() => {
     saveBoardsToLocalStorage();
@@ -101,30 +97,6 @@ const App: React.FC = () => {
       localStorage.setItem("boards", JSON.stringify(boardsData));
     }
   }
-
-  // const handleIssues = (fetchedIssues: Issue[], url: string) => {
-  //   setIsLoading(true);
-  //   setIssues(fetchedIssues);
-  //   setInputUrl(url);
-
-  //   const savedBoards = localStorage.getItem("boards");
-  //   if (savedBoards) {
-  //     const boardsData = JSON.parse(savedBoards);
-  //     const boardForUrl = boardsData.find(
-  //       (boardData: BoardData) => boardData.url === url
-  //     );
-  //     if (boardForUrl) {
-  //       // Update the boards with the data from localStorage
-  //       setBoards(boardForUrl.boards);
-  //     } else {
-  //       setBoards([
-  //         { id: 1, title: "ToDo", items: [] },
-  //         { id: 2, title: "In Progress", items: [] },
-  //         { id: 3, title: "Done", items: [] },
-  //       ]);
-  //     }
-  //   }
-  // };
 
   const handleIssues = (fetchedIssues: Issue[], url: string) => {
     setIsLoading(true);
@@ -260,13 +232,13 @@ const App: React.FC = () => {
           <div className='board'
             onDragOver={(e) => { dragOverHandler(e) }}
             onDrop={(e) => dropCardHandler(e, board)}
-          key={board.id}
+            key={board.id}
           >
             <div className='container'>
               <div className='board__title'>{board.title}</div>
               {board.items.map(item =>
                 <div
-                   key ={item.id}
+                  key={item.id}
                   onDragOver={(e) => { dragOverHandler(e) }}
                   onDragLeave={e => dragLeaveHandler(e)}
                   onDragEnd={(e) => { dragEndHandler(e) }}
