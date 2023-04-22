@@ -31,12 +31,13 @@ box-sizing: border-box;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  /* min-width: 100%; */
+  width: 100%;
+  text-align: center;
 }
 .board__title {
   border: 2px solid rgb(188, 238, 144);
   background-color: rgb(235, 254, 254);
-  border-radius: 5px;
+  border-radius: 25px;
   font-size: 1.5rem;
   font-weight: 600;
   align-items: center;
@@ -58,11 +59,13 @@ box-sizing: border-box;
 .serch{
   border: 2px solid rgb(188, 238, 144);
   background-color: rgb(235, 254, 254);
-  border-radius: 5px;
+  border-radius: 25px;
   font-size: 1.5rem;
   font-weight: 600;
   width: 40%;
   max-width: 70%;
+  padding: 6px 14px;
+
 }
 
 .center{
@@ -74,9 +77,10 @@ box-sizing: border-box;
 .fetch{
   border: 2px solid rgb(188, 238, 144);
   background-color: rgb(235, 254, 254);
-  border-radius: 5px;
+  border-radius: 25px;
   font-size: 1.4rem;
   font-weight: 300;
+  padding: 6px 14px;
 }
 .fetch:hover{
   background: #64cc69;  
