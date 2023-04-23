@@ -12,7 +12,6 @@ interface Item {
 }
 interface Board {
   id: number;
-  // number: number;
   title: string;
   items: Item[];
 }
@@ -41,9 +40,9 @@ interface Issue {
   comments: number;
 }
 
-const App: React.FC = () => {
+const App: React.FC = React.memo(() => {
 
-  const [issues, setIssues] = useState<any[]>(null);////
+  const [issues, setIssues] = useState<any[]>(null);
   const [boards, setBoards] = useState<Board[]>([
     { id: 1, title: "ToDo", items: [] },
     { id: 2, title: "in Progress", items: [] },
@@ -69,7 +68,7 @@ const App: React.FC = () => {
   useEffect(() => {
     saveBoardsToLocalStorage();
   }, [boards, inputUrl]);
-  //збереження даних у ls
+  //Loading in localStorage 
 
   useEffect(() => {
     if (isLoading && issues.length > 0) {
@@ -77,7 +76,7 @@ const App: React.FC = () => {
       setIsLoading(false);
     }
   }, [issues, isLoading]);
-  //старт сортування
+  //Sorting start
 
   function saveBoardsToLocalStorage() {
     if (inputUrl) {
@@ -122,7 +121,6 @@ const App: React.FC = () => {
 
     setInputUrl(url);
   };
-
 
 
   const dragOverHandler = (e: React.DragEvent) => {
@@ -208,7 +206,6 @@ const App: React.FC = () => {
     });
   }
 
-
   function dropCardHandler(e: React.DragEvent, board: Board) {
     board.items.push(currentItem)
     const currentIndex = currentBoard.items.indexOf(currentItem)
@@ -257,6 +254,6 @@ const App: React.FC = () => {
       </div>
     </div>
   )
-}
+})
 
 export default App;
